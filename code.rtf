@@ -1,0 +1,379 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 #include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+\par
+struct person\par
+\{\par
+    char name[30];\par
+    char country_code[4];\par
+    long int mble_no;\par
+    char sex[8];\par
+    char mail[100];\par
+\};\par
+\par
+// Defining person data type.\par
+typedef struct person person;\par
+\par
+// All function declaration.\par
+void remove_all();\par
+void print_menu();\par
+void add_person();\par
+void list_record();\par
+void search_person();\par
+void remove_person();\par
+void update_person();\par
+void take_input(person *p);\par
+\par
+\par
+// Program starts here.\par
+int main()\par
+\{\par
+    start();\par
+    return 0;\par
+\}\par
+\par
+// This function will start our program.\par
+void start()\par
+\{\par
+    int choice;\par
+    while(1)\par
+    \{\par
+        print_menu();\par
+        scanf("%d",&choice);\par
+        switch(choice)\par
+        \{\par
+            case 1:\par
+                list_record();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            case 2:\par
+                add_person();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            case 3:\par
+                search_person();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            case 4:\par
+                remove_person();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            case 5:\par
+                update_person();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            case 6:\par
+                remove_all();\par
+                getchar();\par
+                getchar();\par
+                break;\par
+            default :\par
+                system("clear");\par
+                printf("Thanks for using phonebook visit again : )\\n");\par
+                getchar();\par
+                getchar();\par
+                exit(1);\par
+        \}\par
+    \}\par
+\}\par
+\par
+// This will print main menu.\par
+void print_menu()\par
+\{\par
+    system("clear");\par
+    printf("\\t\\t****************************************************************\\n");\par
+    printf("\\t\\t*                  Welcome TO My phone book                    *\\n");\par
+    printf("\\t\\t****************************************************************\\n\\n");\par
+    printf("\\t\\t\\t1) list record\\n\\n");\par
+    printf("\\t\\t\\t2) Add person\\n\\n");\par
+    printf("\\t\\t\\t3) Search person Details\\n\\n");\par
+    printf("\\t\\t\\t4) Remove person\\n\\n");\par
+    printf("\\t\\t\\t5) Update person\\n\\n");\par
+    printf("\\t\\t\\t6) Delete all contacts\\n\\n");\par
+    printf("\\t\\t\\t7) exit Phonebook\\n\\n\\n");\par
+\par
+    printf("\\t\\t\\t\\tEnter your Choice : ");\par
+\}\par
+\par
+// This function will add contact into phonebook.\par
+void add_person()\par
+\{\par
+    system("clear");\par
+    FILE *fp;\par
+    fp = fopen("phonebook_db", "ab+");\par
+    if (fp == NULL)\par
+    \{\par
+        printf("Error in file opening, Plz try again !\\n");\par
+        printf("Press any key to continue....\\n");\par
+        return;\par
+    \}\par
+    else\par
+    \{\par
+        person p;\par
+        take_input(&p);\par
+        fwrite(&p, sizeof(p), 1, fp);\par
+        fflush(stdin);\par
+        fclose(fp);\par
+        system("clear");\par
+        printf("Record added Successfully\\n");\par
+        printf("Press any key to continue ....\\n");\par
+\par
+    \}\par
+\}\par
+\par
+// By this we take contact information.\par
+void take_input(person *p)\par
+\{\par
+    system("clear");\par
+    // This getchar is for taking \\n occured by previous functions.\par
+    // So that scanset in scanf will work properly.\par
+    getchar();\par
+    printf("Enter name : ");\par
+    // Here we are using scanset '^' - >  until get\par
+    scanf("%[^\\n]s",p->name);\par
+\par
+    printf("Enter country code : ");\par
+    scanf("%s",p->country_code); \par
+    \par
+    printf("Enter mobile no : ");\par
+    scanf("%ld",&p->mble_no); \par
+\par
+    printf("Enter sex : ");\par
+    scanf("%s",p->sex); \par
+    \par
+    printf("Enter email : ");\par
+    scanf("%s",p->mail); \par
+\}\par
+\par
+// This function will list contact available in phonebook.\par
+void list_record()\par
+\{\par
+    system("clear");\par
+    FILE *fp;\par
+    fp = fopen("phonebook_db", "rb");\par
+    if (fp == NULL)\par
+    \{\par
+        printf("Error in file opening, Plz try again !\\n");\par
+        printf("Press any key to continue....\\n");\par
+        return;\par
+    \}\par
+    else\par
+    \{\par
+        person p;\par
+        printf("\\n\\t\\t\\t\\t******************************************************************************\\n");\par
+        printf("\\t\\t\\t\\t*                  Here is all records listed in phonebook                   *\\n");\par
+        printf("\\t\\t\\t\\t******************************************************************************\\n\\n\\n");\par
+        printf("  NAME\\t\\t\\t\\t   COUNTRY CODE\\t\\t    PHONE NO\\t\\t    SEX\\t\\t             EMAIL\\n");\par
+        printf("---------------------------------------------------------------------------------------------------------------------------------------------\\n");\par
+        // fseek(fp,-(sizeof(p)*2L),2);\par
+        while (fread(&p, sizeof(p), 1, fp) == 1)\par
+        \{\par
+            int i;\par
+            int len1 = 40 - strlen(p.name);\par
+            int len2 = 19 - strlen(p.country_code);\par
+            int len3 = 15;\par
+            int len4 = 21 - strlen(p.sex);\par
+            printf("%s",p.name);\par
+            for(i=0;i<len1;i++) printf(" ");\par
+\par
+            printf("%s",p.country_code);\par
+            for(i=0;i<len2;i++) printf(" ");\par
+\par
+            printf("%ld",p.mble_no);\par
+            for(i=0;i<len3;i++) printf(" ");\par
+\par
+            printf("%s",p.sex);\par
+            for(i=0;i<len4;i++) printf(" ");\par
+\par
+            printf("%s",p.mail);\par
+            printf("\\n");\par
+            fflush(stdin);\par
+        \}\par
+        fflush(stdin);\par
+        fclose(fp);\par
+        printf("\\n\\nPress any key to continue....\\n");\par
+        \par
+    \}\par
+\}\par
+\par
+// This function will search contact in phonebook.\par
+void search_person()\par
+\{\par
+    system("clear");\par
+    long int phone;\par
+    printf("Enter Phone number of the person you want to search : ");\par
+    scanf("%ld",&phone);\par
+\par
+    FILE *fp;\par
+    fp = fopen("phonebook_db", "rb");\par
+    if (fp == NULL)\par
+    \{\par
+        printf("Error in file opening, Plz try again !\\n");\par
+        printf("Press any key to continue....\\n");\par
+        return;\par
+    \}\par
+    else\par
+    \{\par
+        int flag = 0;\par
+        person p;\par
+        while (fread(&p, sizeof(p), 1, fp) == 1)\par
+        \{\par
+            if(p.mble_no == phone)\par
+            \{\par
+                printf("  NAME\\t\\t\\t\\t   COUNTRY CODE\\t\\t    PHONE NO\\t\\t    SEX\\t\\t             EMAIL\\n");\par
+                printf("---------------------------------------------------------------------------------------------------------------------------------------------\\n");\par
+                int i;\par
+                int len1 = 40 - strlen(p.name);\par
+                int len2 = 19 - strlen(p.country_code);\par
+                int len3 = 15;\par
+                int len4 = 21 - strlen(p.sex);\par
+                printf("%s",p.name);\par
+                for(i=0;i<len1;i++) printf(" ");\par
+\par
+                printf("%s",p.country_code);\par
+                for(i=0;i<len2;i++) printf(" ");\par
+\par
+                printf("%ld",p.mble_no);\par
+                for(i=0;i<len3;i++) printf(" ");\par
+\par
+                printf("%s",p.sex);\par
+                for(i=0;i<len4;i++) printf(" ");\par
+\par
+                printf("%s",p.mail);\par
+                printf("\\n");\par
+\par
+                flag = 1;\par
+                break;\par
+            \}\par
+            else continue;\par
+            // fflush(stdin);\par
+        \}\par
+        if(flag == 0) \par
+        \{\par
+            system("clear");\par
+            printf("Person is not in the Phonebook\\n");\par
+        \}\par
+        fflush(stdin);\par
+        fclose(fp);\par
+        printf("\\n\\nPress any key to continue....\\n");\par
+    \}\par
+\par
+\}\par
+\par
+// This function will remove contact from phonebook.\par
+void remove_person()\par
+\{\par
+    system("clear");\par
+    long int phone;\par
+    printf("Enter Phone number of the person you want to remove from phonebook : ");\par
+    scanf("%ld",&phone);\par
+\par
+    FILE *fp,*temp;\par
+    fp = fopen("phonebook_db", "rb");\par
+    temp = fopen("temp","wb+");\par
+    if (fp == NULL)\par
+    \{\par
+        printf("Error in file opening, Plz try again !\\n");\par
+        printf("Press any key to continue....\\n");\par
+        return;\par
+    \}\par
+    else\par
+    \{\par
+        person p;\par
+        int flag = 0;\par
+        while (fread(&p, sizeof(p), 1, fp) == 1)\par
+        \{\par
+            if(p.mble_no == phone)\par
+            \{\par
+                system("clear");\par
+                printf("Person removed successfully\\n");\par
+                flag = 1;\par
+            \}\par
+            else fwrite(&p,sizeof(p),1,temp);\par
+            fflush(stdin);\par
+        \}\par
+        if(flag == 0)\par
+        \{\par
+            system("clear");\par
+            printf("No record found for %d number\\n",phone);\par
+        \}\par
+        fclose(fp);\par
+        fclose(temp);\par
+        remove("phonebook_db");\par
+        rename("temp","phonebook_db");\par
+        fflush(stdin);\par
+        printf("Press any key to continue....\\n");\par
+        \par
+    \}\par
+\par
+\}\par
+\par
+// This function will update contact information.\par
+void update_person()\par
+\{\par
+\par
+    system("clear");\par
+    long int phone;\par
+    printf("Enter Phone number of the person you want to update details : ");\par
+    scanf("%ld",&phone);\par
+\par
+    FILE *fp,*temp;\par
+    fp = fopen("phonebook_db", "rb");\par
+    temp = fopen("temp","wb+");\par
+    if (fp == NULL)\par
+    \{\par
+        printf("Error in file opening, Plz try again !\\n");\par
+        printf("Press any key to continue....\\n");\par
+        return;\par
+    \}\par
+    else\par
+    \{\par
+        int flag = 0;\par
+        person p;\par
+        while (fread(&p, sizeof(p), 1, fp) == 1)\par
+        \{\par
+            if(p.mble_no == phone) \par
+            \{   \par
+                take_input(&p);\par
+                fwrite(&p, sizeof(p), 1, temp);\par
+                system("clear");\par
+                printf("Data updated successfully\\n");\par
+                flag = 1;\par
+            \}\par
+            else fwrite(&p,sizeof(p),1,temp);\par
+            fflush(stdin);\par
+        \}\par
+        if(flag == 0)\par
+        \{\par
+            system("clear");\par
+            printf("No record found for %d number\\n",phone);\par
+        \}\par
+        fclose(fp);\par
+        fclose(temp);\par
+        remove("phonebook_db");\par
+        rename("temp","phonebook_db");\par
+        fflush(stdin);\par
+        printf("Press any key to continue....\\n");\par
+    \}\par
+\}\par
+\par
+\par
+// This function will clear all the data of phonebook.\par
+void remove_all()\par
+\{\par
+    char choice;\par
+    system("clear");\par
+    remove("./phonebook_db");\par
+    printf("All data in the phonebook deleted successfully\\n");\par
+    printf("Press any key to continue ... \\n");\par
+\}\par
+}
+ 
