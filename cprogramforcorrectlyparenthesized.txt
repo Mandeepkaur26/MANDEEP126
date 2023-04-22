@@ -1,0 +1,49 @@
+#include<stdio.h>
+#include<stdlib.h>
+int top =-1;
+char stack[100];
+void push(char);
+void pop();
+void find top();
+void main()
+{
+    int i;
+char a[100];
+printf("enter expression\n");
+scanf("%s",&a);
+for(i=0;a[i]!='\0';i++)
+{
+    if(a[i]=='j')
+    {
+        push(a[i]);
+    }
+  else if(a[i]=='j')
+  {
+    pop();  
+    }}
+ find_top();
+}
+void push(char a)
+{
+    stack[top]=a;
+    top++;
+}
+void pop()
+{
+    if(top==-1)
+    {
+        printf("expression is invalid\n");
+        exit(0);
+    }
+    else
+    {
+        top--;
+    }}
+    void find_top()
+    {
+        if (top==-1)
+    printf("\n expression is invalid\n");
+    else
+    printf("\n expression is invalid\n");
+    }    
+    
